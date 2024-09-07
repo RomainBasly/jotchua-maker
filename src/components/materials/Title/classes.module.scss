@@ -1,0 +1,35 @@
+.root {
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: "Permanent Marker", sans-serif;
+  font-size: 40px;
+  text-align: center;
+
+  &.animate-title {
+    animation: fadeInUp 0.8s forwards 0.5s;
+  }
+
+  @media screen and (max-width: 400px) {
+    padding: 0;
+  }
+  @media screen and (max-width: 320px) {
+    font-size: 30px;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}

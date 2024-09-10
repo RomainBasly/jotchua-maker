@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import MouseMoveComponent from '@/src/components/materials/MouseMoveComponent'
 
 const inter = Inter({ subsets: ['latin'] })
 

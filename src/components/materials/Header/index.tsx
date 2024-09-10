@@ -6,7 +6,7 @@ import { Bars3Icon } from '@heroicons/react/24/solid'
 import SlidingMenu from '../SlidingMenu'
 import { useRouter } from 'next/navigation'
 
-export default function Header() {
+const Header = React.memo(function Header() {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -57,4 +57,6 @@ export default function Header() {
       </div>
     </div>
   )
-}
+})
+
+export default Header

@@ -12,7 +12,7 @@ import {
   SparklesIcon,
 } from '@heroicons/react/24/solid'
 import OptionSection from './OptionSection/index'
-import { ImageConfigItem, ImagesConfig } from '@/app/meme-generator/page'
+import { ImageConfigItem, ImagesConfig } from '@/app/page'
 
 type MemeGeneratorProps = {
   combinedConfig: ImagesConfig
@@ -39,7 +39,7 @@ export default function MemeGeneratorUsingFabric(
       fabricCanvas.current = new fabric.Canvas(canvasRef.current)
       const initialImageUrl =
         props.combinedConfig.background[0]?.url ||
-        '/images/memeGenerator/backgrounds/0.png' // Update this path to your default image
+        '/images/memeGenerator/backgrounds/0.png'
 
       fabric.Image.fromURL(initialImageUrl, (img) => {
         if (
@@ -151,10 +151,10 @@ export default function MemeGeneratorUsingFabric(
       let top = objectMatchedWithURLAndConfig?.initialTop
 
       img.set({
-        left: objectMatchedWithURLAndConfig?.initialLeft, // Adjust position according to your needs
-        top: top, // Adjust position according to your needs
-        scaleX: objectMatchedWithURLAndConfig?.initialScaleX, // Scale for the hat
-        scaleY: objectMatchedWithURLAndConfig?.initialScaleY, // Scale for the hat
+        left: objectMatchedWithURLAndConfig?.initialLeft,
+        top: top,
+        scaleX: objectMatchedWithURLAndConfig?.initialScaleX,
+        scaleY: objectMatchedWithURLAndConfig?.initialScaleY,
         selectable: true,
         hasControls: true,
         hasBorders: true,
@@ -162,9 +162,9 @@ export default function MemeGeneratorUsingFabric(
         lockScalingFlip: true, // Prevents flipping the object via scaling
         rotatingPointOffset: 20,
         borderColor: '#e9c46a', // Sets the color of the border around the selected object
-        cornerColor: '#264653', // Sets the color of the control corners
-        cornerSize: 10, // Sets the size of the corner controls
-        cornerStyle: 'circle', // Can be 'rect' or 'circle'
+        cornerColor: '#264653',
+        cornerSize: 10,
+        cornerStyle: 'circle',
         transparentCorners: false,
       })
       fabricCanvas.current?.add(img)
@@ -232,7 +232,7 @@ export default function MemeGeneratorUsingFabric(
   }
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click() // Manually trigger file input
+    fileInputRef.current?.click()
   }
 
   const handleBackgroundImageChange = (imageUrl: string) => {
@@ -278,7 +278,7 @@ export default function MemeGeneratorUsingFabric(
 
       const link = document.createElement('a')
       link.href = dataUrl
-      link.download = 'meme.png' // Set the download file name
+      link.download = 'meme.png'
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -306,8 +306,8 @@ export default function MemeGeneratorUsingFabric(
   const resetCanvas = () => {
     if (fabricCanvas.current) {
       fabricCanvas.current.clear()
-      setSelectedBackground('/images/memeGenerator/backgrounds/0.png') // Reset to default background if needed
-      handleBackgroundImageChange('/images/memeGenerator/backgrounds/0.png') // Load the default background image
+      setSelectedBackground('/images/memeGenerator/backgrounds/0.png')
+      handleBackgroundImageChange('/images/memeGenerator/backgrounds/0.png')
     }
   }
 
@@ -407,111 +407,17 @@ export default function MemeGeneratorUsingFabric(
               <h2 className={classes['section-title']}>
                 Select the objects and move them on the canvas
               </h2>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.body && (
+              {Object.entries(props.combinedConfig).map(
+                ([key, value]) =>
+                  key !== 'background' && (
                     <OptionSection
-                      images={props.combinedConfig.body}
+                      images={value}
                       onImageChange={addObject}
-                      title={'body'}
-                      className={classes['body']}
+                      title={key}
+                      className={classes[key]}
                     />
-                  )}
-                  {props.combinedConfig.head && (
-                    <OptionSection
-                      images={props.combinedConfig.head}
-                      onImageChange={addObject}
-                      title={'head'}
-                      className={classes['head']}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.hat && (
-                    <OptionSection
-                      images={props.combinedConfig.hat}
-                      onImageChange={addObject}
-                      title={'hat'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.glasses && (
-                    <OptionSection
-                      images={props.combinedConfig.glasses}
-                      onImageChange={addObject}
-                      title={'glasses'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.tatoos && (
-                    <OptionSection
-                      images={props.combinedConfig.tatoos}
-                      onImageChange={addObject}
-                      title={'tatoo'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.shoes && (
-                    <OptionSection
-                      images={props.combinedConfig.shoes}
-                      onImageChange={addObject}
-                      title={'shoes'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.trousers && (
-                    <OptionSection
-                      images={props.combinedConfig.trousers}
-                      onImageChange={addObject}
-                      title={'short'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
-
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.frenz && (
-                    <OptionSection
-                      images={props.combinedConfig.frenz}
-                      onImageChange={addObject}
-                      title={'frenz'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={classes['options-characters']}>
-                <div className={classes['selector-section']}>
-                  {props.combinedConfig.other && (
-                    <OptionSection
-                      images={props.combinedConfig.other}
-                      onImageChange={addObject}
-                      title={'weapons'}
-                      className={classes['body']}
-                    />
-                  )}
-                </div>
-              </div>
+                  ),
+              )}
             </div>
           </div>
         </div>

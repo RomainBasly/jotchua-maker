@@ -47,8 +47,7 @@ export default function Page() {
       const response = await fetch(
         `api/images?path=${encodeURIComponent(imgPath)}`,
       )
-      const data = await response.json()
-      return data
+      return await response.json()
     }
 
     const combinedConfig = async () => {

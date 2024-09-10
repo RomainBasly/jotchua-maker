@@ -42,6 +42,8 @@ export default function Page() {
     initialConfig,
   )
 
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
   useEffect(() => {
     const fetchImages = async (imgPath: string) => {
       const response = await fetch(
@@ -90,17 +92,17 @@ export default function Page() {
     }
 
     combinedConfig()
+    setIsLoading(false)
   }, [])
 
   return (
     <div className={classes['root']}>
       <Header />
 
-      <Suspense
-        fallback={<div className={classes['fallback']}>...Loading</div>}
-      >
-        <MemeGenerator combinedConfig={combinedConfig} />
-      </Suspense>
+      {!isLoading && (
+        <MemeGenerator combinedConfig={isLoading ? null : combinedConfig} />
+      )}
+      {isLoading && <div className={classes['fallback']}>Loading...</div>}
     </div>
   )
 }

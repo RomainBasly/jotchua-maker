@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import classes from './classes.module.scss'
 import dynamic from 'next/dynamic'
 import Header from '@/src/components/materials/Header'
@@ -41,7 +41,6 @@ export default function Page() {
   const [combinedConfig, setCombinedConfig] = useState<ImagesConfig>(
     initialConfig,
   )
-  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchImages = async (imgPath: string) => {
@@ -88,7 +87,6 @@ export default function Page() {
         })
       }
       setCombinedConfig(combined)
-      setIsLoading(false)
     }
 
     combinedConfig()
@@ -97,7 +95,12 @@ export default function Page() {
   return (
     <div className={classes['root']}>
       <Header />
-      <MemeGenerator combinedConfig={!isLoading ? combinedConfig : null} />
+
+      <Suspense
+        fallback={<div className={classes['fallback']}>...Loading</div>}
+      >
+        <MemeGenerator combinedConfig={combinedConfig} />
+      </Suspense>
     </div>
   )
 }

@@ -379,58 +379,56 @@ export default function MemeGeneratorUsingFabric(
         </div>
 
         <div className={classes['options']}>
-          <Suspense fallback={'...Loading'}>
-            {props.combinedConfig && (
-              <div className={classes['options-container']}>
-                <div className={classes['subtitle']}>Choose your options</div>
-                <div className={classes['section']}>
-                  <div className={classes['options-background']}>
-                    {props.combinedConfig?.background && (
-                      <OptionSection
-                        images={props.combinedConfig.background}
-                        onImageChange={handleBackgroundImageChange}
-                        selectedImage={selectedBackground}
-                        title={'background'}
-                        className={classes['background']}
-                      />
-                    )}
-                    <div className={classes['separator']}></div>
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      accept="image/*"
-                      className={classes['upload']}
-                      ref={fileInputRef}
+          {props.combinedConfig && (
+            <div className={classes['options-container']}>
+              <div className={classes['subtitle']}>Choose your options</div>
+              <div className={classes['section']}>
+                <div className={classes['options-background']}>
+                  {props.combinedConfig?.background && (
+                    <OptionSection
+                      images={props.combinedConfig.background}
+                      onImageChange={handleBackgroundImageChange}
+                      selectedImage={selectedBackground}
+                      title={'background'}
+                      className={classes['background']}
                     />
-                    <div className={classes['or-upload']}>
-                      <button
-                        onClick={handleButtonClick}
-                        className={classes['file-upload-button']}
-                      >
-                        <PlusIcon className={classes['icon']} />
-                        Upload Image
-                      </button>
-                    </div>
+                  )}
+                  <div className={classes['separator']}></div>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    className={classes['upload']}
+                    ref={fileInputRef}
+                  />
+                  <div className={classes['or-upload']}>
+                    <button
+                      onClick={handleButtonClick}
+                      className={classes['file-upload-button']}
+                    >
+                      <PlusIcon className={classes['icon']} />
+                      Upload Image
+                    </button>
                   </div>
-                  <h2 className={classes['section-title']}>
-                    Select the objects and move them on the canvas
-                  </h2>
-                  {props.combinedConfig &&
-                    Object.entries(props.combinedConfig).map(
-                      ([key, value]) =>
-                        key !== 'background' && (
-                          <OptionSection
-                            images={value}
-                            onImageChange={addObject}
-                            title={key}
-                            className={classes[key]}
-                          />
-                        ),
-                    )}
                 </div>
+                <h2 className={classes['section-title']}>
+                  Select the objects and move them on the canvas
+                </h2>
+                {props.combinedConfig &&
+                  Object.entries(props.combinedConfig).map(
+                    ([key, value]) =>
+                      key !== 'background' && (
+                        <OptionSection
+                          images={value}
+                          onImageChange={addObject}
+                          title={key}
+                          className={classes[key]}
+                        />
+                      ),
+                  )}
               </div>
-            )}
-          </Suspense>
+            </div>
+          )}
         </div>
       </div>
     </div>

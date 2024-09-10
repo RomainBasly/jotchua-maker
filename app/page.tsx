@@ -41,6 +41,7 @@ export default function Page() {
   const [combinedConfig, setCombinedConfig] = useState<ImagesConfig>(
     initialConfig,
   )
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchImages = async (imgPath: string) => {
@@ -87,6 +88,7 @@ export default function Page() {
         })
       }
       setCombinedConfig(combined)
+      setIsLoading(false)
     }
 
     combinedConfig()
@@ -95,7 +97,7 @@ export default function Page() {
   return (
     <div className={classes['root']}>
       <Header />
-      <MemeGenerator combinedConfig={combinedConfig} />
+      <MemeGenerator combinedConfig={!isLoading ? combinedConfig : null} />
     </div>
   )
 }

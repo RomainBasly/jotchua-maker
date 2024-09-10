@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, Suspense } from 'react'
 import { fabric } from 'fabric'
 import classes from './classes.module.scss'
 import SectionTitle from '../Title'
@@ -15,7 +15,7 @@ import OptionSection from './OptionSection/index'
 import { ImageConfigItem, ImagesConfig } from '@/app/page'
 
 type MemeGeneratorProps = {
-  combinedConfig: ImagesConfig
+  combinedConfig: ImagesConfig | null
 }
 
 const MAX_WIDTH = defineMaxScreenWidth()
@@ -38,7 +38,7 @@ export default function MemeGeneratorUsingFabric(
     if (canvasRef.current) {
       fabricCanvas.current = new fabric.Canvas(canvasRef.current)
       const initialImageUrl =
-        props.combinedConfig.background[0]?.url ||
+        props.combinedConfig?.background[0]?.url ||
         '/images/memeGenerator/backgrounds/0.png'
 
       fabric.Image.fromURL(initialImageUrl, (img) => {
@@ -142,35 +142,37 @@ export default function MemeGeneratorUsingFabric(
     }
   }
 
-  const addObject = (imageUrl: string) => {
-    const objectMatchedWithURLAndConfig = Object.values(props.combinedConfig)
-      .flatMap((element) => element)
-      .find((item: ImageConfigItem) => item.url === imageUrl)
+  const addObject = (imageUrl: string | undefined) => {
+    if (props.combinedConfig && imageUrl) {
+      const objectMatchedWithURLAndConfig = Object.values(props.combinedConfig)
+        .flatMap((element) => element)
+        .find((item: ImageConfigItem) => item.url === imageUrl)
 
-    fabric.Image.fromURL(imageUrl, function (img) {
-      let top = objectMatchedWithURLAndConfig?.initialTop
+      fabric.Image.fromURL(imageUrl, function (img) {
+        let top = objectMatchedWithURLAndConfig?.initialTop
 
-      img.set({
-        left: objectMatchedWithURLAndConfig?.initialLeft,
-        top: top,
-        scaleX: objectMatchedWithURLAndConfig?.initialScaleX,
-        scaleY: objectMatchedWithURLAndConfig?.initialScaleY,
-        selectable: true,
-        hasControls: true,
-        hasBorders: true,
-        hasRotatingPoint: true, // Ensures that the rotation control is visible
-        lockScalingFlip: true, // Prevents flipping the object via scaling
-        rotatingPointOffset: 20,
-        borderColor: '#e9c46a', // Sets the color of the border around the selected object
-        cornerColor: '#264653',
-        cornerSize: 10,
-        cornerStyle: 'circle',
-        transparentCorners: false,
+        img.set({
+          left: objectMatchedWithURLAndConfig?.initialLeft,
+          top: top,
+          scaleX: objectMatchedWithURLAndConfig?.initialScaleX,
+          scaleY: objectMatchedWithURLAndConfig?.initialScaleY,
+          selectable: true,
+          hasControls: true,
+          hasBorders: true,
+          hasRotatingPoint: true, // Ensures that the rotation control is visible
+          lockScalingFlip: true, // Prevents flipping the object via scaling
+          rotatingPointOffset: 20,
+          borderColor: '#e9c46a', // Sets the color of the border around the selected object
+          cornerColor: '#264653',
+          cornerSize: 10,
+          cornerStyle: 'circle',
+          transparentCorners: false,
+        })
+        fabricCanvas.current?.add(img)
+        fabricCanvas.current?.bringToFront(img)
+        fabricCanvas.current?.requestRenderAll()
       })
-      fabricCanvas.current?.add(img)
-      fabricCanvas.current?.bringToFront(img)
-      fabricCanvas.current?.requestRenderAll()
-    })
+    }
   }
 
   const deleteSelectedObject = (): boolean => {
@@ -311,9 +313,13 @@ export default function MemeGeneratorUsingFabric(
     }
   }
 
-  const getRandomImage = (category: ImageConfigItem[]) => {
-    const randomIndex = Math.floor(Math.random() * category.length)
-    return category[randomIndex].url
+  const getRandomImage = (
+    category: ImageConfigItem[] | undefined,
+  ): string | undefined => {
+    if (category) {
+      const randomIndex = Math.floor(Math.random() * category.length)
+      return category[randomIndex].url
+    }
   }
 
   const randomizeForEachCategory = () => {
@@ -327,7 +333,7 @@ export default function MemeGeneratorUsingFabric(
     ]
 
     categories.map((category) => {
-      const items = props.combinedConfig[category]
+      const items = props.combinedConfig?.[category]
       addObject(getRandomImage(items))
     })
   }
@@ -373,53 +379,56 @@ export default function MemeGeneratorUsingFabric(
         </div>
 
         <div className={classes['options']}>
-          <div className={classes['options-container']}>
-            <div className={classes['subtitle']}>Choose your options</div>
-            <div className={classes['section']}>
-              <div className={classes['options-background']}>
-                {props.combinedConfig.background && (
-                  <OptionSection
-                    images={props.combinedConfig.background}
-                    onImageChange={handleBackgroundImageChange}
-                    selectedImage={selectedBackground}
-                    title={'background'}
-                    className={classes['background']}
-                  />
-                )}
-                <div className={classes['separator']}></div>
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  accept="image/*"
-                  className={classes['upload']}
-                  ref={fileInputRef}
-                />
-                <div className={classes['or-upload']}>
-                  <button
-                    onClick={handleButtonClick}
-                    className={classes['file-upload-button']}
-                  >
-                    <PlusIcon className={classes['icon']} />
-                    Upload Image
-                  </button>
-                </div>
-              </div>
-              <h2 className={classes['section-title']}>
-                Select the objects and move them on the canvas
-              </h2>
-              {Object.entries(props.combinedConfig).map(
-                ([key, value]) =>
-                  key !== 'background' && (
+          <Suspense fallback={'...Loading'}>
+            <div className={classes['options-container']}>
+              <div className={classes['subtitle']}>Choose your options</div>
+              <div className={classes['section']}>
+                <div className={classes['options-background']}>
+                  {props.combinedConfig?.background && (
                     <OptionSection
-                      images={value}
-                      onImageChange={addObject}
-                      title={key}
-                      className={classes[key]}
+                      images={props.combinedConfig.background}
+                      onImageChange={handleBackgroundImageChange}
+                      selectedImage={selectedBackground}
+                      title={'background'}
+                      className={classes['background']}
                     />
-                  ),
-              )}
+                  )}
+                  <div className={classes['separator']}></div>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    className={classes['upload']}
+                    ref={fileInputRef}
+                  />
+                  <div className={classes['or-upload']}>
+                    <button
+                      onClick={handleButtonClick}
+                      className={classes['file-upload-button']}
+                    >
+                      <PlusIcon className={classes['icon']} />
+                      Upload Image
+                    </button>
+                  </div>
+                </div>
+                <h2 className={classes['section-title']}>
+                  Select the objects and move them on the canvas
+                </h2>
+                {props.combinedConfig &&
+                  Object.entries(props.combinedConfig).map(
+                    ([key, value]) =>
+                      key !== 'background' && (
+                        <OptionSection
+                          images={value}
+                          onImageChange={addObject}
+                          title={key}
+                          className={classes[key]}
+                        />
+                      ),
+                  )}
+              </div>
             </div>
-          </div>
+          </Suspense>
         </div>
       </div>
     </div>

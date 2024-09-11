@@ -19,92 +19,81 @@ export type ImagesConfig = {
 
 const imagesConfigTyped: ImagesConfig = imagesConfig
 
-const initialConfig: ImagesConfig = {
-  background: [],
-  body: [],
-  head: [],
-  hat: [],
-  glasses: [],
-  shoes: [],
-  tatoos: [],
-  trousers: [],
-  frenz: [],
-  other: [],
-}
-
 const MemeGenerator = dynamic(
   () => import('../src/components/materials/MemeGenerator'),
-  { ssr: false },
+  {
+    ssr: false,
+  },
 )
 
-export default function Page() {
-  const [combinedConfig, setCombinedConfig] = useState<ImagesConfig>(
-    initialConfig,
-  )
+// Utility function to preload an image
+const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.src = src
+    img.onload = () => resolve()
+    img.onerror = () => reject(new Error(`Failed to load image: ${src}`))
+  })
+}
 
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+export default function Page() {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  const [combinedConfig, setCombinedConfig] = useState<ImagesConfig>({
+    background: [],
+    body: [],
+    head: [],
+    hat: [],
+    glasses: [],
+    shoes: [],
+    tatoos: [],
+    trousers: [],
+    frenz: [],
+    other: [],
+  })
 
   useEffect(() => {
-    const fetchImages = async (imgPath: string) => {
-      const response = await fetch(
-        `api/images?path=${encodeURIComponent(imgPath)}`,
-      )
-      return await response.json()
-    }
+    const preloadAndCombineConfig = async () => {
+      try {
+        // Extract all URLs from the config
+        const allImageUrls = Object.values(imagesConfigTyped)
+          .flat()
+          .map((item) => item.url)
 
-    const combinedConfig = async () => {
-      const categories = [
-        { path: 'backgrounds', name: 'background' },
-        { path: 'characters/body', name: 'body' },
-        { path: 'characters/head', name: 'head' },
-        {
-          path: 'characters/accessories/glasses',
-          name: 'glasses',
-        },
-        { path: 'characters/accessories/hat', name: 'hat' },
-        { path: 'characters/accessories/shoes', name: 'shoes' },
-        { path: 'characters/accessories/tatoos', name: 'tatoos' },
-        { path: 'characters/accessories/trousers', name: 'trousers' },
-        { path: 'characters/accessories/other', name: 'other' },
-        { path: 'characters/frenz', name: 'frenz' },
-      ]
+        // Wait for all images to be preloaded
+        await Promise.all(allImageUrls.map(preloadImage))
 
-      const combined: ImagesConfig = { ...initialConfig }
+        // Now that the images are preloaded, combine the configuration
+        const combined: ImagesConfig = { ...combinedConfig }
 
-      for (const category of categories) {
-        const imageUrls = await fetchImages(category.path)
-
-        combined[category.name] = imageUrls.map((imageUrl: string) => {
-          const configItem = imagesConfigTyped[category.name]?.find(
-            (item: { url: string }) => item.url === imageUrl,
-          )
-
-          return {
-            url: imageUrl,
-            initialLeft: configItem?.initialLeft || 0,
-            initialTop: configItem?.initialTop || 0,
-            initialScaleX: configItem?.initialScaleX || 0.5,
-            initialScaleY: configItem?.initialScaleY || 0.5,
-          }
+        Object.keys(imagesConfigTyped).forEach((key) => {
+          combined[key] = imagesConfigTyped[key].map((item) => ({
+            url: item.url,
+            initialLeft: item.initialLeft || 0,
+            initialTop: item.initialTop || 0,
+            initialScaleX: item.initialScaleX || 0.5,
+            initialScaleY: item.initialScaleY || 0.5,
+          }))
         })
+
+        setCombinedConfig(combined)
+        setIsLoaded(true)
+      } catch (error) {
+        console.error('Error loading images:', error)
       }
-      // setTimeout(() => {
-      setCombinedConfig(combined)
-      setIsLoading(false)
-      // }, 1000)
     }
 
-    combinedConfig()
-    setIsLoading(false)
+    preloadAndCombineConfig()
   }, [])
 
   return (
     <div className={classes['root']}>
       <Header />
-      {!isLoading && (
-        <MemeGenerator combinedConfig={isLoading ? null : combinedConfig} />
+      {/* Only render MemeGenerator once all images are preloaded and combinedConfig is set */}
+      {isLoaded ? (
+        <MemeGenerator combinedConfig={combinedConfig} />
+      ) : (
+        <div className={classes['fallback']}>Loading images...</div>
       )}
-      {isLoading && <div className={classes['fallback']}>Loading...</div>}
     </div>
   )
 }

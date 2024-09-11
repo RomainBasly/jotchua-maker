@@ -9,23 +9,7 @@
       "category": "background"
     },
     {
-      "url": "/images/memeGenerator/backgrounds/1.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "background"
-    },
-    {
       "url": "/images/memeGenerator/backgrounds/2.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "background"
-    },
-    {
-      "url": "/images/memeGenerator/backgrounds/10.jpeg",
       "initialLeft": 50,
       "initialTop": 50,
       "initialScaleX": 0.25,
@@ -41,31 +25,7 @@
       "category": "background"
     },
     {
-      "url": "/images/memeGenerator/backgrounds/189.avif",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "background"
-    },
-    {
       "url": "/images/memeGenerator/backgrounds/2.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "background"
-    },
-    {
-      "url": "/images/memeGenerator/backgrounds/3.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "background"
-    },
-    {
-      "url": "/images/memeGenerator/backgrounds/4.jpeg",
       "initialLeft": 50,
       "initialTop": 50,
       "initialScaleX": 0.25,
@@ -98,14 +58,6 @@
     },
     {
       "url": "/images/memeGenerator/backgrounds/8.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "background"
-    },
-    {
-      "url": "/images/memeGenerator/backgrounds/9.png",
       "initialLeft": 50,
       "initialTop": 50,
       "initialScaleX": 0.25,
@@ -993,38 +945,6 @@
       "category": "other"
     },
     {
-      "url": "/images/memeGenerator/characters/accessories/other/14.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/15.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/16.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/17.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
       "url": "/images/memeGenerator/characters/accessories/other/18.png",
       "initialLeft": 180,
       "initialTop": 240,
@@ -1129,14 +1049,6 @@
       "category": "other"
     },
     {
-      "url": "/images/memeGenerator/characters/accessories/other/30.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.5,
-      "initialScaleY": 0.5,
-      "category": "other"
-    },
-    {
       "url": "/images/memeGenerator/characters/accessories/other/31.png",
       "initialLeft": 50,
       "initialTop": 280,
@@ -1177,41 +1089,9 @@
       "category": "other"
     },
     {
-      "url": "/images/memeGenerator/characters/accessories/other/36.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/37.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/38.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
       "url": "/images/memeGenerator/characters/accessories/other/4.png",
       "initialLeft": 97,
       "initialTop": 83,
-      "initialScaleX": 0.25,
-      "initialScaleY": 0.25,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/40.png",
-      "initialLeft": 50,
-      "initialTop": 50,
       "initialScaleX": 0.25,
       "initialScaleY": 0.25,
       "category": "other"
@@ -1286,14 +1166,6 @@
       "initialTop": 215,
       "initialScaleX": 0.1,
       "initialScaleY": 0.1,
-      "category": "other"
-    },
-    {
-      "url": "/images/memeGenerator/characters/accessories/other/9.png",
-      "initialLeft": 50,
-      "initialTop": 50,
-      "initialScaleX": 0.08,
-      "initialScaleY": 0.08,
       "category": "other"
     }
   ],

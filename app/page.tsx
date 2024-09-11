@@ -1,5 +1,5 @@
 'use client'
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import classes from './classes.module.scss'
 import dynamic from 'next/dynamic'
 import Header from '@/src/components/materials/Header'
@@ -88,7 +88,10 @@ export default function Page() {
           }
         })
       }
+      // setTimeout(() => {
       setCombinedConfig(combined)
+      setIsLoading(false)
+      // }, 1000)
     }
 
     combinedConfig()
@@ -98,7 +101,6 @@ export default function Page() {
   return (
     <div className={classes['root']}>
       <Header />
-
       {!isLoading && (
         <MemeGenerator combinedConfig={isLoading ? null : combinedConfig} />
       )}

@@ -1,5 +1,11 @@
 'use client'
-import React, { useState, useRef, useEffect, Suspense } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  Suspense,
+  useCallback,
+} from 'react'
 import { fabric } from 'fabric'
 import classes from './classes.module.scss'
 import SectionTitle from '../Title'
@@ -27,6 +33,28 @@ export default function MemeGeneratorUsingFabric(
   const [selectedBackground, setSelectedBackground] = useState<string>(
     '/public/images/memeGenerator/backgrounds/0.png',
   )
+
+  const [imagesLoadedCount, setImagesLoadedCount] = useState<number>(0)
+  const [totalImages, setTotalImages] = useState<number>(0)
+  const [_, setAreAllImagesLoaded] = useState<boolean>(false)
+
+  const imagesOnLoad = useCallback(() => {
+    setImagesLoadedCount((prev) => prev + 1)
+  }, [])
+
+  useEffect(() => {
+    if (props.combinedConfig) {
+      const total = Object.values(props.combinedConfig).flat().length
+
+      setTotalImages(total)
+    }
+  }, [props.combinedConfig])
+
+  useEffect(() => {
+    if (imagesLoadedCount === totalImages && totalImages > 0) {
+      setAreAllImagesLoaded(true)
+    }
+  }, [imagesLoadedCount, totalImages])
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const fabricCanvas = useRef<fabric.Canvas | null>(null)
@@ -384,15 +412,16 @@ export default function MemeGeneratorUsingFabric(
               <div className={classes['subtitle']}>Choose your options</div>
               <div className={classes['section']}>
                 <div className={classes['options-background']}>
-                  {props.combinedConfig?.background && (
-                    <OptionSection
-                      images={props.combinedConfig.background}
-                      onImageChange={handleBackgroundImageChange}
-                      selectedImage={selectedBackground}
-                      title={'background'}
-                      className={classes['background']}
-                    />
-                  )}
+                  {/* {areAllImagesLoaded && ( */}
+                  <OptionSection
+                    images={props.combinedConfig.background}
+                    onImageChange={handleBackgroundImageChange}
+                    selectedImage={selectedBackground}
+                    title={'background'}
+                    className={classes['background']}
+                    onImagesLoad={imagesOnLoad}
+                  />
+                  {/* } */}
                   <div className={classes['separator']}></div>
                   <input
                     type="file"
@@ -414,18 +443,18 @@ export default function MemeGeneratorUsingFabric(
                 <h2 className={classes['section-title']}>
                   Select the objects and move them on the canvas
                 </h2>
-                {props.combinedConfig &&
-                  Object.entries(props.combinedConfig).map(
-                    ([key, value]) =>
-                      key !== 'background' && (
-                        <OptionSection
-                          images={value}
-                          onImageChange={addObject}
-                          title={key}
-                          className={classes[key]}
-                        />
-                      ),
-                  )}
+                {Object.entries(props.combinedConfig).map(
+                  ([key, value]) =>
+                    key !== 'background' && (
+                      <OptionSection
+                        images={value}
+                        onImageChange={addObject}
+                        title={key}
+                        className={classes[key]}
+                        onImagesLoad={imagesOnLoad}
+                      />
+                    ),
+                )}
               </div>
             </div>
           )}
